@@ -9,7 +9,7 @@ public class Tarea03 {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Ventana().setVisible(true);
-
+                
             }
         });
     }

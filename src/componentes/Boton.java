@@ -11,7 +11,7 @@ public class Boton extends JButton {
     private boolean pressed = false;
 
     private final Color backPressed = Color.BLUE;
-    private final Color backNormal = Color.GRAY;
+    private final Color backNormal = Color.lightGray;
     private final Color textPressed = Color.WHITE;
     private final Color textNormal = Color.BLACK;
     private final Border borderPressed = BorderFactory.createLoweredBevelBorder();
@@ -27,6 +27,9 @@ public class Boton extends JButton {
         super.setForeground(textNormal);
         super.setBackground(backNormal);
         super.setBorder(borderNormal);
+        super.setMargin(new Insets(0,0,20,20));
+        super.setPreferredSize(new Dimension(100, 25));
+        
     }
 
     public void setPressed(Boolean pressed) {
