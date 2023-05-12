@@ -9,13 +9,10 @@ import javax.swing.*;
 public class ImagePanel extends JPanel{
 
     private BufferedImage image;
-    int w,h;
 
- 
-    public ImagePanel(String ruta,int w, int h) {
-        setSize(w, h);
-        this.w=w;
-        this.h=h;
+public ImagePanel( ){}
+    public ImagePanel(String ruta) {
+        setVisible(false);
        try {                
           image = ImageIO.read(new File(ruta));
        } catch (IOException ex) {

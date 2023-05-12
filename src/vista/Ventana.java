@@ -4,61 +4,56 @@ import componentes.Boton;
 import componentes.Contenedor;
 import componentes.Cronometro;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.*;
+import java.util.*;
 import javax.swing.*;
 import listeners.*;
-import util.Util;
+import util.*;
 
 public class Ventana extends JFrame implements ActionListener {
 
     GridBagConstraints gbc;
-
-    Boton btInf;
-    Boton btRom;
-    Boton btTerr;
-    Boton btReset;
-    Boton btExit;
-
+    JPanel principal = new JPanel();
+    Boton btInf, btRom, btTerr, btReset, btExit;
+    ArrayList<Boton> listaboton = new ArrayList<Boton>();
     Cronometro crono;
-    Contenedor c = new Contenedor();
+    Contenedor c;
     Util util = new Util();
 
     public Ventana() {
 
-        btInf.addActionListener(this);
-        btRom.addActionListener(this);
-        btTerr.addActionListener(this);
-        btReset.addActionListener(this);
-        btExit.addActionListener(this);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        crono = new Cronometro();
+        this.getContentPane().add(principal);
+        this.setSize(800, 600);
+        principal.setSize(getWidth(), getHeight());
+        principal.setLayout(new GridBagLayout());
+        this.getContentPane().add(principal);
+
+        iniciarObjectos();
+        iniciarListeners();
+
         crono.addCronometroEventListener(new ManejadorCronometroEventListener());
         crono.setActivo(false);
+        crono.setContenedor(c);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.getContentPane().setLayout(new GridBagLayout());
-        this.setSize(600, 600);
-
-        GridBagConstraints constraints = new GridBagConstraints();
-
-        this.getContentPane().add(btInf,
+        principal.add(btInf,
                 addConstraints(0, 0, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE, 1.0, 1.0));
-        this.getContentPane().add(btRom,
+        principal.add(btRom,
                 addConstraints(2, 0, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE, 1.0, 1.0));
-        this.getContentPane().add(btTerr,
+        principal.add(btTerr,
                 addConstraints(4, 0, GridBagConstraints.REMAINDER, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE, 1.0, 1.0));
 
-        this.getContentPane().add(c,
+        principal.add(crono.getContenedor(),
                 addConstraints(0, 1, GridBagConstraints.REMAINDER, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 1.0, 20.0));
 
-        this.getContentPane().add(crono,
+        principal.add(crono,
                 addConstraints(0, 3, GridBagConstraints.REMAINDER, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 1.0, 1.0));
 
-        this.getContentPane().add(btReset,
+        principal.add(btReset,
                 addConstraints(0, 4, GridBagConstraints.RELATIVE, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, 1.0, 1.0));
-        this.getContentPane().add(btExit,
+        principal.add(btExit,
                 addConstraints(2, 4, GridBagConstraints.REMAINDER, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, 1.0, 1.0));
     }
 
@@ -66,7 +61,6 @@ public class Ventana extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         Boton bt = (Boton) e.getSource();
-        crono.setActivo(true);
 
         switch (bt.getText()) {
             case "Infantil":
@@ -74,37 +68,56 @@ public class Ventana extends JFrame implements ActionListener {
                     btInf.setPressed(true);
                     btRom.setPressed(false);
                     btTerr.setPressed(false);
-                    c = util.cambiarImagenes(c, "infantil");
-                    crono.reiniciarCrono();
-                    crono.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
-
+                    cambiarTema("Comic Sans MS");
+                    principal.setBackground(Color.yellow);
+                    c.setBackground(Color.yellow);
                 }
                 break;
+
             case "Romantica":
                 if (!btRom.getPressed()) {
                     btInf.setPressed(false);
                     btRom.setPressed(true);
                     btTerr.setPressed(false);
-                    c = util.cambiarImagenes(c, "romantica");
-
+                    cambiarTema("Script MT Bold");
+                    principal.setBackground(Color.pink);
+                    c.setBackground(Color.pink);
                 }
                 break;
+
             case "Terror":
                 if (!btTerr.getPressed()) {
                     btInf.setPressed(false);
                     btRom.setPressed(false);
                     btTerr.setPressed(true);
-                    c = util.cambiarImagenes(c, "terror");
+                    cambiarTema("Chiller");
+                    principal.setBackground(Color.black);
+                    c.setBackground(Color.black);
                 }
                 break;
+
+            case "Reiniciar":
+                crono.reiniciarCrono();
+                break;
+
             case "Salir":
                 System.exit(0);
+                break;
+        }
+        if (!bt.equals(btReset)) {
+            ArrayList<ImagePanel> lista = util.listaImagenes(bt.getText());
+            crono.setListaImg(lista);
+            if (!crono.getActivo()) {
+                crono.startCronometro();
+            } else {
+                crono.reiniciarCrono();
+            }
+            c.removeAll();
+            crono.setContenedor(c);
+            c.revalidate();
+            c.repaint();
 
         }
-
-        c.revalidate();
-        c.repaint();
-
     }
 
     private GridBagConstraints addConstraints(int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill, double gridweightx, double gridweighty) {
@@ -115,41 +128,75 @@ public class Ventana extends JFrame implements ActionListener {
 
     private void iniciarObjectos() {
         ObjectInputStream flujoEntrada;
+
         try {
-            flujoEntrada = new ObjectInputStream(new FileInputStream("boton.obj"));
-            String str = (String) flujoEntrada.readObject();
-            System.out.println(str);
-            btInf = (Boton) flujoEntrada.readObject();
-            btRom = (Boton) flujoEntrada.readObject();
-            btTerr = (Boton) flujoEntrada.readObject();
-            btReset = (Boton) flujoEntrada.readObject();
-            btExit = (Boton) flujoEntrada.readObject();
+
+            for (int i = 0; i < 5; i++) {
+                flujoEntrada = new ObjectInputStream(new FileInputStream("src/componentes/boton.obj"));
+                switch (i) {
+                    case 0:
+                        btInf = (Boton) flujoEntrada.readObject();
+                        listaboton.add(btInf);
+                        break;
+                    case 1:
+                        btRom = (Boton) flujoEntrada.readObject();
+                        listaboton.add(btRom);
+                        break;
+                    case 2:
+                        btTerr = (Boton) flujoEntrada.readObject();
+                        listaboton.add(btTerr);
+                        break;
+                    case 3:
+                        btReset = (Boton) flujoEntrada.readObject();
+                        listaboton.add(btReset);
+                        break;
+                    case 4:
+                        btExit = (Boton) flujoEntrada.readObject();
+                        listaboton.add(btExit);
+                        break;
+                }
+            }
 
             btInf.setText("Infantil");
             btRom.setText("Romantica");
             btTerr.setText("Terror");
             btReset.setText("Reiniciar");
             btExit.setText("Salir");
+
         } catch (Exception e) {
-            System.out.println("Error al recuperar la clase BOTON");
+            System.out.println("Error al recuperar la clase BOTON\n" + e.getMessage());
         }
 
         try {
-            flujoEntrada = new ObjectInputStream(new FileInputStream("contenedor.obj"));
-            String str = (String) flujoEntrada.readObject();
-            System.out.println(str);
+            flujoEntrada = new ObjectInputStream(new FileInputStream("src/componentes/contenedor.obj"));
             c = (Contenedor) flujoEntrada.readObject();
         } catch (Exception e) {
             System.out.println("Error al recuperar la clase CONTENEDOR");
         }
 
         try {
-            flujoEntrada = new ObjectInputStream(new FileInputStream("crono.obj"));
-            String str = (String) flujoEntrada.readObject();
-            System.out.println(str);
+            flujoEntrada = new ObjectInputStream(new FileInputStream("src/componentes/crono.obj"));
             crono = (Cronometro) flujoEntrada.readObject();
         } catch (Exception e) {
             System.out.println("Error al recuperar la clase CRONOMETRO");
         }
     }
+
+    private void iniciarListeners() {
+        btInf.addActionListener(this);
+        btRom.addActionListener(this);
+        btTerr.addActionListener(this);
+        btReset.addActionListener(this);
+        btExit.addActionListener(this);
+    }
+
+    private void cambiarTema(String text) {
+
+        crono.setFont(new Font(text, Font.BOLD, 22));
+        for (int i = 0; i < 5; i++) {
+            listaboton.get(i).setFont(new Font(text, Font.BOLD, 18));
+        }
+
+    }
+
 }

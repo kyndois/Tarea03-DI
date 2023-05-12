@@ -4,41 +4,24 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.ListIterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.*;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import listeners.*;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import util.ImagePanel;
 
-/*Duration also can be accessed using other duration-based units, such as minutes and hours. In addition, the DAYS unit can be used and is treated as exactly equal to 24 hours. You convert a Duration to these time units using these conversion methods:
-
-    long toDays(): Gets the number of days in this duration.
-    long toHours(): Gets the number of hours in this duration.
-    long toMillis(): Converts this duration to the total length in milliseconds.
-    long toMinutes(): Gets the number of minutes in this duration.
-    long toNanos(): Converts this duration to the total length in nanoseconds expressed as a long.
-
-And these methods available since Java 9:
-
-    long toDaysPart(): Extracts the number of days in the duration.
-    int toHoursPart(): Extracts the number of hours part in the duration.
-    int toMillisPart(): Extracts the number of milliseconds part of the duration.
-    int toMinutesPart(): Extracts the number of minutes part in the duration.
-    int toNanosPart(): Get the nanoseconds part within seconds of the duration.
-    long toSeconds(): Gets the number of seconds in this duration.
-    int toSecondsPart(): Extracts the number of seconds part in the duration.*/
 public class Cronometro extends JLabel implements Serializable, CronometroEventListener {
 
     private Boolean activo;
+    private Contenedor contenedor;
     private Timer timer;
     private LocalTime time, inicio;
     private TimerTask task;
+    ArrayList<ImagePanel> lista;
     private int tiempo; //Propiedad que le va a indicar el tiempo a cronometrar
-
     //Aqui se almacenan todos los manejadores
     private ArrayList listeners;
 
@@ -46,8 +29,10 @@ public class Cronometro extends JLabel implements Serializable, CronometroEventL
     public Cronometro() {
         this.activo = true;
         this.inicio = LocalTime.now();
-        super.setFont(new Font("TimesRoman", Font.BOLD, 22));
-        super.setForeground(Color.blue);
+        super.setBackground(Color.BLUE);
+        super.setForeground(Color.WHITE);
+        super.setOpaque(true);
+        super.setHorizontalAlignment(SwingConstants.CENTER);
 
         //Creamos el almacen de los listeners
         listeners = new ArrayList<>();
@@ -108,10 +93,33 @@ public class Cronometro extends JLabel implements Serializable, CronometroEventL
         return inicio;
     }
 
+    public void setListaImg(ArrayList<ImagePanel> lista) {
+        this.lista = lista;
+    }
+
+    public void setContenedor(Contenedor c) {
+        this.contenedor = c;
+        cambiarImg(lista);
+    }
+
+    public Contenedor getContenedor() {
+        return contenedor;
+    }
+
+    private void cambiarImg(ArrayList<ImagePanel> lista) {
+
+        if (lista != null) {
+            contenedor.removeAll();
+            contenedor.setImg1(lista.get(0));
+            contenedor.setImg2(lista.get(1));
+            contenedor.setImg3(lista.get(2));
+        }
+    }
+
     public final void contar() {
 
         //Inicializar el tiempo que quiero que cronometre para probar la ejecución
-        tiempo = 12;
+        tiempo = lista.size() - 1 * 10;
         activo = true;
 
         timer = new Timer();
@@ -121,8 +129,30 @@ public class Cronometro extends JLabel implements Serializable, CronometroEventL
             public void run() {
                 time = LocalTime.now();
                 Duration d1 = Duration.between(inicio, time);
-
+                lista.get(1).setVisible(false);
+                lista.get(2).setVisible(false);
                 setText(String.valueOf(d1.toSeconds()));
+                if ((int) d1.toSeconds() >= 1) {
+                    lista.get(0).setVisible(true);
+                }
+                if ((int) d1.toSeconds() >= 10) {
+                    lista.get(1).setVisible(true);
+                }
+                if ((int) d1.toSeconds() >= 20) {
+                    lista.get(2).setVisible(true);
+                }
+                int reset = 1;
+                for (int i = 3; i < lista.size(); i++) {
+                    if (i - 3 == 3) {
+                        reset++;
+                    }
+                    if ((int) d1.toSeconds() == i * 10) {
+                        ImagePanel im = lista.get(i);
+                        lista.set(i - (3 * reset), im);
+                        cambiarImg(lista);
+                    }
+                }
+
                 if (tiempo == (int) d1.toSeconds()) {
                     pararCronometro();
                 }
@@ -140,13 +170,14 @@ public class Cronometro extends JLabel implements Serializable, CronometroEventL
 
     public void startCronometro() {
         setActivo(true);
+        this.inicio = LocalTime.now();
         contar();
     }
 
     public void reiniciarCrono() {
-        if (task != null) {
-            task.cancel();
-        }
+        pararCronometro();
+        this.activo = true;
+        this.inicio = LocalTime.now();
         contar();
     }
 

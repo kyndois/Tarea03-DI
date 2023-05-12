@@ -16,15 +16,15 @@ public class Tarea03 {
         Boton boton = new Boton();
         ObjectOutputStream salida = null;
         try {
-            salida = new ObjectOutputStream(new FileOutputStream("crono.obj"));
+            salida = new ObjectOutputStream(new FileOutputStream("src/componentes/crono.obj"));
             salida.writeObject(crono);
             salida.close();
 
-            salida = new ObjectOutputStream(new FileOutputStream("boton.obj"));
+            salida = new ObjectOutputStream(new FileOutputStream("src/componentes/boton.obj"));
             salida.writeObject(boton);
             salida.close();
 
-            salida = new ObjectOutputStream(new FileOutputStream("contenedor.obj"));
+            salida = new ObjectOutputStream(new FileOutputStream("src/componentes/contenedor.obj"));
             salida.writeObject(cont);
             salida.close();
 
