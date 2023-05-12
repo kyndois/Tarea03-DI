@@ -1,39 +1,34 @@
 package componentes;
 
 import java.awt.*;
+import java.io.Serializable;
 import javax.swing.*;
 import util.ImagePanel;
 
-public class Contenedor extends JPanel {
+public class Contenedor extends JPanel implements Serializable{
 
     private ImagePanel img1;
     private ImagePanel img2;
     private ImagePanel img3;
 
     public Contenedor() {
-        super.setLayout(new FlowLayout());
+        super.setLayout(new GridLayout(1,3));
+        super.add(new JLabel(""));
         super.add(new JLabel("BIENVENIDO"));
+        super.add(new JLabel(""));
+        super.setBackground(Color.red);
     }
 
     public Contenedor(ImagePanel img1, ImagePanel img2, ImagePanel img3) {
-        super.removeAll();
-
-        this.img1 = img1;
-        img1.setBackground(Color.yellow);
-        img1.setOpaque(true);
-        this.img2 = img2;
-        img2.setBackground(Color.red);
-        img2.setOpaque(true);
-        this.img3 = img3;
-        img3.setBackground(Color.orange);
-        img3.setOpaque(true);
-
-        super.add(img1);
-        super.add(img2);
-        super.add(img3);
         
-        super.revalidate();
-        super.repaint();
+        this.img1 = img1;
+        this.img2 = img2;
+        this.img3 = img3;
+
+        add(img1);
+        add(img2);
+        add(img3);
+        
     }
 
     /**

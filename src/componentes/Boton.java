@@ -1,11 +1,12 @@
 package componentes;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-public class Boton extends JButton {
+public class Boton extends JButton implements Serializable{
 
     private String bText;
     private boolean pressed = false;
@@ -18,18 +19,16 @@ public class Boton extends JButton {
     private final Border borderNormal = BorderFactory.createRaisedBevelBorder();
 
     public Boton() {
-    }
-
-    public Boton(String bText) {
-        this.bText = bText;
         this.pressed = false;
-        super.setText(bText);
         super.setForeground(textNormal);
         super.setBackground(backNormal);
         super.setBorder(borderNormal);
         super.setMargin(new Insets(0,0,20,20));
         super.setPreferredSize(new Dimension(100, 25));
-        
+    }
+
+    public Boton(String bText) {
+        this.bText = bText;
     }
 
     public void setPressed(Boolean pressed) {
