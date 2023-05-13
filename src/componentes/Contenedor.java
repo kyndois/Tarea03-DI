@@ -7,14 +7,15 @@ import util.ImagePanel;
 
 public class Contenedor extends JPanel implements Serializable {
 
-
     private ImagePanel img1;
     private ImagePanel img2;
     private ImagePanel img3;
 
     public Contenedor() {
+
+        //Atributos guardados al crear el objeto
+
 //        super.setLayout(new GridLayout(1, 3));
-        
     }
 
     /**

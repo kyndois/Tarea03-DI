@@ -27,6 +27,8 @@ public class Cronometro extends JLabel implements Serializable, CronometroEventL
 
     //Constructor vacio
     public Cronometro() {
+        //Atributos guardados al crear el objeto
+
 //        this.activo = true;
 //        this.inicio = LocalTime.now();
 //        super.setBackground(Color.cyan);
@@ -37,7 +39,6 @@ public class Cronometro extends JLabel implements Serializable, CronometroEventL
 //        //Creamos el almacen de los listeners
 //        listeners = new ArrayList<>();
 //        listeners.add(this);
-
     }
 
     public void addCronometroEventListener(CronometroEventListener listener) {

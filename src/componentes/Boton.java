@@ -17,6 +17,8 @@ public class Boton extends JButton implements Serializable{
     private final Border borderNormal = BorderFactory.createRaisedBevelBorder();
 
     public Boton() {
+        //Atributos guardados al crear el objeto
+        
 //        this.pressed = false;
 //        super.setForeground(textNormal);
 //        super.setBackground(backNormal);
