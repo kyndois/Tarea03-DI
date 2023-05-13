@@ -27,16 +27,16 @@ public class Cronometro extends JLabel implements Serializable, CronometroEventL
 
     //Constructor vacio
     public Cronometro() {
-        this.activo = true;
-        this.inicio = LocalTime.now();
-        super.setBackground(Color.BLUE);
-        super.setForeground(Color.WHITE);
-        super.setOpaque(true);
-        super.setHorizontalAlignment(SwingConstants.CENTER);
-
-        //Creamos el almacen de los listeners
-        listeners = new ArrayList<>();
-        listeners.add(this);
+//        this.activo = true;
+//        this.inicio = LocalTime.now();
+//        super.setBackground(Color.cyan);
+//        super.setForeground(Color.RED);
+//        super.setOpaque(true);
+//        super.setHorizontalAlignment(SwingConstants.CENTER);
+//
+//        //Creamos el almacen de los listeners
+//        listeners = new ArrayList<>();
+//        listeners.add(this);
 
     }
 
@@ -186,14 +186,14 @@ public class Cronometro extends JLabel implements Serializable, CronometroEventL
     public void StopCronometro(CronometroEventObject args
     ) {
         // TODO Auto-generated method stub
-        System.out.println("Voy a parar el cronometro");
+        System.out.println("Parando");
     }
 
     @Override
     public void StartCronometro(CronometroEventObject args
     ) {
         // TODO Auto-generated method stub
-        System.out.println("Voy a inicializar el cronometro");
+        System.out.println("Iniciando");
 
     }
 
@@ -201,7 +201,7 @@ public class Cronometro extends JLabel implements Serializable, CronometroEventL
     public void ResetCronometro(CronometroEventObject args
     ) {
         // TODO Auto-generated method stub
-        System.out.println("Voy a resetear el cronometro");
+        System.out.println("Reiniciando");
         if (!activo) {
             startCronometro();
         }

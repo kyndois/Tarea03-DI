@@ -6,24 +6,28 @@ import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class ImagePanel extends JPanel{
+public class ImagePanel extends JPanel {
 
     private BufferedImage image;
 
-public ImagePanel( ){}
-    public ImagePanel(String ruta) {
-        setVisible(false);
-       try {                
-          image = ImageIO.read(new File(ruta));
-       } catch (IOException ex) {
-            System.out.println("NO SE ENCUENTRA RUTA");
-       }
+    public ImagePanel() {
     }
 
-@Override
-protected void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-}
+    public ImagePanel(String ruta) {
+        if (!ruta.equals("src/img/Inicio/welcome.jpg")) {
+            setVisible(false);
+        }
+        try {
+            image = ImageIO.read(new File(ruta));
+        } catch (IOException ex) {
+            System.out.println("NO SE ENCUENTRA RUTA");
+        }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+    }
 
 }

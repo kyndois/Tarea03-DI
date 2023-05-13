@@ -7,7 +7,6 @@ import javax.swing.border.Border;
 
 public class Boton extends JButton implements Serializable{
 
-    private String bText;
     private boolean pressed = false;
 
     private final Color backPressed = Color.BLUE;
@@ -18,12 +17,12 @@ public class Boton extends JButton implements Serializable{
     private final Border borderNormal = BorderFactory.createRaisedBevelBorder();
 
     public Boton() {
-        this.pressed = false;
-        super.setForeground(textNormal);
-        super.setBackground(backNormal);
-        super.setBorder(borderNormal);
-        super.setMargin(new Insets(0,0,20,20));
-        super.setPreferredSize(new Dimension(100, 25));
+//        this.pressed = false;
+//        super.setForeground(textNormal);
+//        super.setBackground(backNormal);
+//        super.setBorder(borderNormal);
+//        super.setMargin(new Insets(0,0,20,20));
+//        super.setPreferredSize(new Dimension(100, 25));
     }
 
     public void setPressed(Boolean pressed) {

@@ -21,15 +21,17 @@ public class Ventana extends JFrame implements ActionListener {
     Contenedor c;
     Util util = new Util();
     String lastbt = "";
-
+    final JLabel firma = new JLabel("Imagenes con licencia de uso por https://www.pexels.com/");
     public Ventana() {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        firma.setForeground(Color.red);
+        firma.setFont(new Font("Times New Roman", Font.BOLD, 12));
         this.getContentPane().add(principal);
         this.setSize(800, 600);
         principal.setSize(getWidth(), getHeight());
         principal.setLayout(new GridBagLayout());
+        principal.setBackground(Color.cyan);
         this.getContentPane().add(principal);
 
         iniciarObjectos();
@@ -37,34 +39,43 @@ public class Ventana extends JFrame implements ActionListener {
 
         crono.addCronometroEventListener(new ManejadorCronometroEventListener());
         crono.setActivo(false);
-        crono.setContenedor(c);
 
         principal.add(btInf,
-                addConstraints(0, 0, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE, 1.0, 1.0));
+                addConstraints(0, 0, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE,
+                        1.0, 1.0, 0, 0, 0, 5));
         principal.add(btRom,
-                addConstraints(2, 0, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE, 1.0, 1.0));
+                addConstraints(2, 0, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE,
+                        1.0, 1.0, 0, 0, 0, 5));
         principal.add(btTerr,
-                addConstraints(4, 0, GridBagConstraints.REMAINDER, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE, 1.0, 1.0));
-
-        principal.add(crono.getContenedor(),
-                addConstraints(0, 1, GridBagConstraints.REMAINDER, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 1.0, 20.0));
-
+                addConstraints(4, 0, GridBagConstraints.REMAINDER, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE,
+                        1.0, 1.0, 0, 0, 0, 5));
+        principal.add(c,
+                addConstraints(0, 1, GridBagConstraints.REMAINDER, 3, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                        1.0, 20.0, 5, 5, 0, 5));
         principal.add(crono,
-                addConstraints(0, 3, GridBagConstraints.REMAINDER, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 1.0, 1.0));
-
+                addConstraints(1, 4, GridBagConstraints.RELATIVE, 1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                        1.0, 1.0, 0, 0, 0, 0));
         principal.add(btReset,
-                addConstraints(0, 4, GridBagConstraints.RELATIVE, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, 1.0, 1.0));
+                addConstraints(0, 5, GridBagConstraints.RELATIVE, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                        1.0, 1.0, 0, 0, 0, 0));
         principal.add(btExit,
-                addConstraints(2, 4, GridBagConstraints.REMAINDER, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, 1.0, 1.0));
+                addConstraints(2, 5, GridBagConstraints.REMAINDER, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                        1.0, 1.0, 0, 0, 0, 0));
+        principal.add(firma,
+                addConstraints(0, 6, 5, 1, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
+                        1.0, 1.0, 0, 10, 0, 0));
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (!btReset.isEnabled()) {
+            btReset.setEnabled(true);
+        }
         Boton bt = (Boton) e.getSource();
 
         switch (bt.getText()) {
-            case "Infantil":
+            case "INFANTIL":
                 if (!btInf.getPressed()) {
                     btInf.setPressed(true);
                     btRom.setPressed(false);
@@ -76,7 +87,7 @@ public class Ventana extends JFrame implements ActionListener {
                 }
                 break;
 
-            case "Romantica":
+            case "ROMANTICA":
                 if (!btRom.getPressed()) {
                     btInf.setPressed(false);
                     btRom.setPressed(true);
@@ -88,7 +99,7 @@ public class Ventana extends JFrame implements ActionListener {
                 }
                 break;
 
-            case "Terror":
+            case "TERROR":
                 if (!btTerr.getPressed()) {
                     btInf.setPressed(false);
                     btRom.setPressed(false);
@@ -97,17 +108,19 @@ public class Ventana extends JFrame implements ActionListener {
                     principal.setBackground(Color.black);
                     c.setBackground(Color.black);
                     lastbt = "Terror";
+
                 }
                 break;
 
-            case "Reiniciar":
+            case "REINICIAR":
                 crono.reiniciarCrono();
                 break;
 
-            case "Salir":
+            case "SALIR":
                 System.exit(0);
                 break;
         }
+
         ArrayList<ImagePanel> lista = util.listaImagenes(lastbt);
         crono.setListaImg(lista);
         if (!bt.equals(btReset)) {
@@ -123,9 +136,9 @@ public class Ventana extends JFrame implements ActionListener {
         c.repaint();
     }
 
-    private GridBagConstraints addConstraints(int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill, double gridweightx, double gridweighty) {
+    private GridBagConstraints addConstraints(int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill, double gridweightx, double gridweighty, int topi, int lefti, int boti, int righti) {
         gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, gridweightx, gridweighty,
-                anchor, fill, new Insets(5, 5, 0, 5), 0, 0);
+                anchor, fill, new Insets(topi, lefti, boti, righti), 0, 0);
         return gbc;
     }
 
@@ -160,11 +173,12 @@ public class Ventana extends JFrame implements ActionListener {
                 }
             }
 
-            btInf.setText("Infantil");
-            btRom.setText("Romantica");
-            btTerr.setText("Terror");
-            btReset.setText("Reiniciar");
-            btExit.setText("Salir");
+            btInf.setText("INFANTIL");
+            btRom.setText("ROMANTICA");
+            btTerr.setText("TERROR");
+            btReset.setText("REINICIAR");
+            btReset.setEnabled(false);
+            btExit.setText("SALIR");
 
         } catch (Exception e) {
             System.out.println("Error al recuperar la clase BOTON\n" + e.getMessage());
@@ -173,16 +187,22 @@ public class Ventana extends JFrame implements ActionListener {
         try {
             flujoEntrada = new ObjectInputStream(new FileInputStream("src/componentes/contenedor.obj"));
             c = (Contenedor) flujoEntrada.readObject();
+            c.add(new ImagePanel("src/img/Inicio/welcome.jpg"));
+
+            c.revalidate();
+            c.repaint();
         } catch (Exception e) {
-            System.out.println("Error al recuperar la clase CONTENEDOR");
+            System.out.println("Error al recuperar la clase CONTENEDOR\n" + e.getMessage());
         }
 
         try {
             flujoEntrada = new ObjectInputStream(new FileInputStream("src/componentes/crono.obj"));
             crono = (Cronometro) flujoEntrada.readObject();
+
         } catch (Exception e) {
-            System.out.println("Error al recuperar la clase CRONOMETRO");
+            System.out.println("Error al recuperar la clase CRONOMETRO\n" + e.getMessage());
         }
+
     }
 
     private void iniciarListeners() {
@@ -197,7 +217,7 @@ public class Ventana extends JFrame implements ActionListener {
 
         crono.setFont(new Font(text, Font.BOLD, 22));
         for (int i = 0; i < 5; i++) {
-            listaboton.get(i).setFont(new Font(text, Font.BOLD, 18));
+            listaboton.get(i).setFont(new Font(text, Font.BOLD, 14));
         }
 
     }
