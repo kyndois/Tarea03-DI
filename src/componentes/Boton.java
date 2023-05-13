@@ -2,7 +2,6 @@ package componentes;
 
 import java.awt.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -25,10 +24,6 @@ public class Boton extends JButton implements Serializable{
         super.setBorder(borderNormal);
         super.setMargin(new Insets(0,0,20,20));
         super.setPreferredSize(new Dimension(100, 25));
-    }
-
-    public Boton(String bText) {
-        this.bText = bText;
     }
 
     public void setPressed(Boolean pressed) {

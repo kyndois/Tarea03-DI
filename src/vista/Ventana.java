@@ -20,6 +20,7 @@ public class Ventana extends JFrame implements ActionListener {
     Cronometro crono;
     Contenedor c;
     Util util = new Util();
+    String lastbt = "";
 
     public Ventana() {
 
@@ -71,6 +72,7 @@ public class Ventana extends JFrame implements ActionListener {
                     cambiarTema("Comic Sans MS");
                     principal.setBackground(Color.yellow);
                     c.setBackground(Color.yellow);
+                    lastbt = "Infantil";
                 }
                 break;
 
@@ -82,6 +84,7 @@ public class Ventana extends JFrame implements ActionListener {
                     cambiarTema("Script MT Bold");
                     principal.setBackground(Color.pink);
                     c.setBackground(Color.pink);
+                    lastbt = "Romantica";
                 }
                 break;
 
@@ -93,6 +96,7 @@ public class Ventana extends JFrame implements ActionListener {
                     cambiarTema("Chiller");
                     principal.setBackground(Color.black);
                     c.setBackground(Color.black);
+                    lastbt = "Terror";
                 }
                 break;
 
@@ -104,20 +108,19 @@ public class Ventana extends JFrame implements ActionListener {
                 System.exit(0);
                 break;
         }
+        ArrayList<ImagePanel> lista = util.listaImagenes(lastbt);
+        crono.setListaImg(lista);
         if (!bt.equals(btReset)) {
-            ArrayList<ImagePanel> lista = util.listaImagenes(bt.getText());
-            crono.setListaImg(lista);
             if (!crono.getActivo()) {
                 crono.startCronometro();
             } else {
                 crono.reiniciarCrono();
             }
-            c.removeAll();
-            crono.setContenedor(c);
-            c.revalidate();
-            c.repaint();
-
         }
+        c.removeAll();
+        crono.setContenedor(c);
+        c.revalidate();
+        c.repaint();
     }
 
     private GridBagConstraints addConstraints(int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill, double gridweightx, double gridweighty) {

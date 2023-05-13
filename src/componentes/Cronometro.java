@@ -119,7 +119,7 @@ public class Cronometro extends JLabel implements Serializable, CronometroEventL
     public final void contar() {
 
         //Inicializar el tiempo que quiero que cronometre para probar la ejecución
-        tiempo = lista.size() - 1 * 10;
+        tiempo = (lista.size()) * 10;
         activo = true;
 
         timer = new Timer();
@@ -175,29 +175,38 @@ public class Cronometro extends JLabel implements Serializable, CronometroEventL
     }
 
     public void reiniciarCrono() {
-        pararCronometro();
-        this.activo = true;
-        this.inicio = LocalTime.now();
-        contar();
+
+        ListIterator li = listeners.listIterator();
+        while (li.hasNext()) {
+            ((CronometroEventListener) li.next()).ResetCronometro(new CronometroEventObject(this));
+        }
     }
 
     @Override
-    public void StopCronometro(CronometroEventObject args) {
+    public void StopCronometro(CronometroEventObject args
+    ) {
         // TODO Auto-generated method stub
         System.out.println("Voy a parar el cronometro");
     }
 
     @Override
-    public void StartCronometro(CronometroEventObject args) {
+    public void StartCronometro(CronometroEventObject args
+    ) {
         // TODO Auto-generated method stub
         System.out.println("Voy a inicializar el cronometro");
 
     }
 
     @Override
-    public void ResetCronometro(CronometroEventObject args) {
+    public void ResetCronometro(CronometroEventObject args
+    ) {
         // TODO Auto-generated method stub
         System.out.println("Voy a resetear el cronometro");
+        if (!activo) {
+            startCronometro();
+        }
+        pararCronometro();
+        startCronometro();
 
     }
 

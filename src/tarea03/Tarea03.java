@@ -11,6 +11,16 @@ import vista.Ventana;
 public class Tarea03 {
 
     public static void main(String args[]) {
+        //crearObjetos();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Ventana().setVisible(true);
+
+            }
+        });
+    }
+
+    private static void crearObjetos() {
         Contenedor cont = new Contenedor();
         Cronometro crono = new Cronometro();
         Boton boton = new Boton();
@@ -28,12 +38,6 @@ public class Tarea03 {
             salida.writeObject(cont);
             salida.close();
 
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    new Ventana().setVisible(true);
-
-                }
-            });
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Tarea03.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
